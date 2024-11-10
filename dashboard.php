@@ -271,12 +271,12 @@ $user_role = $_SESSION['user_role'];
                     <script src="dashboard.js"></script>
 
                     <!-- Modal Structure -->
-                    <div id="notificationModal" class="modal" style="display: none;">
+                   <div id="notificationModal" class="modal" style="display: none;">
                         <div class="modal-content">
                             <div class="modalhead">
                             <span class="close" onclick="closeModal()">&times;</span>
                             <h2>🔔 Notifications</h2>
-                            <p>Delivery <span id="notification-count"></span> requests for today!</p>
+                            <p>You have <span id="notification-count"></span> Delivery Requests for Today!</p>
                             </div>
                             <div id="notification-content"></div>
                         </div>
