@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         display: true,
                         position: 'bottom',
                         labels: {
-                            color: '#000',
+                            color: '#0e223ed7',
                             font: {
                                 size: 12
                             }
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             size: 14
                         }
                     },
-                    tooltip: {
+                    tooltip: { 
                         callbacks: {
                             label: function(tooltipItem) {
                                 let label = tooltipItem.label || '';
@@ -277,15 +277,15 @@ function openModal() {
         namesList = '<ul>';
         customerRequests.forEach(request => {
             namesList += `
-                 <li class="small-font">
-        Customer Name: ${request.name}<br>
-        Address: ${request.customer_address}<br>
-        Price: ${request.price} <br>
-        Weight: ${request.weight} kg <br>
-        Quantity: ${request.quantity} <br>
-        Request Date: ${request.request_date}<br>
-        Total Amount: ${request.total_amount}
-    </li>
+                <li class="small-font">
+                    Customer Name: ${request.name}<br>
+                    Address: ${request.customer_address}<br>
+                    Price: ${request.price} <br>
+                    Weight: ${request.weight} kg <br>
+                    Quantity: ${request.quantity} <br>
+                    Request Date: ${request.request_date}<br>
+                    Total Amount: ${request.total_amount}
+                </li>
                 <hr></hr>
             `;
         });
@@ -318,5 +318,22 @@ if (closeModalButton) {
 // Trigger to open the notification modal
 document.getElementById("bell-icon").addEventListener("click", openModal);
 
-});
+// Function to check the current time and open the modal at specified times
+function checkTimeAndOpenModal() {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
 
+    // Check if the current time is one of the specified times
+    if ((hours === 9 || hours === 10 || hours === 12 || hours === 15) && minutes === 48) {
+        openModal();
+    }
+}
+
+// Check the time every minute
+setInterval(checkTimeAndOpenModal, 60000);
+
+window.onload = function() {
+    openModal(); // Call the openModal function on page load
+};
+});
