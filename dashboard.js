@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 // NOTIFICATION MODAL ------ BAGONG CODE
-
+// NOTIFICATION MODAL ------ BAGONG CODE
 
 const notificationModal = document.getElementById('notificationModal');
 const notificationCount = document.getElementById('notification-count');
@@ -318,22 +318,6 @@ if (closeModalButton) {
 // Trigger to open the notification modal
 document.getElementById("bell-icon").addEventListener("click", openModal);
 
-// Function to check the current time and open the modal at specified times
-function checkTimeAndOpenModal() {
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-
-    // Check if the current time is one of the specified times
-    if ((hours === 9 || hours === 10 || hours === 12 || hours === 15) && minutes === 48) {
-        openModal();
-    }
-}
-
-// Check the time every minute
-setInterval(checkTimeAndOpenModal, 60000);
-
-window.onload = function() {
-    openModal(); // Call the openModal function on page load
-};
+// The automatic opening of the modal has been removed.
 });
+
