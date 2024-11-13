@@ -261,63 +261,96 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-// NOTIFICATION MODAL ------ BAGONG CODE
-// NOTIFICATION MODAL ------ BAGONG CODE
 
-const notificationModal = document.getElementById('notificationModal');
-const notificationCount = document.getElementById('notification-count');
+    // ------*************** ITO YUNG NOTIFICATION CODE -***************------- //
 
-// Function to open the modal and populate it with data
-function openModal() {
-    notificationModal.style.display = 'block';
-    notificationCount.innerText = requestCount; // Set the notification count
-
-    let namesList = '';
-    if (customerRequests.length > 0) {
-        namesList = '<ul>';
+    const notificationModal = document.getElementById('notificationModal');
+    const notificationCount = document.getElementById('notification-count');
+    
+    function openModal() {
+        notificationModal.style.display = 'block';
+        notificationCount.innerText = requestCount; 
+        
+        const customerMap = {};
         customerRequests.forEach(request => {
-            namesList += `
-                <li class="small-font">
-                    Customer Name: ${request.name}<br>
-                    Address: ${request.customer_address}<br>
-                    Price: ${request.price} <br>
-                    Weight: ${request.weight} kg <br>
-                    Quantity: ${request.quantity} <br>
-                    Request Date: ${request.request_date}<br>
-                    Total Amount: ${request.total_amount}
-                </li>
-                <hr></hr>
-            `;
-        });
-        namesList += '</ul>';
-    } else {
-        namesList = '<p>No new delivery requests.</p>';
-    }
+            const quantity = parseInt(request.quantity, 10);
+            const totalAmount = parseFloat(request.total_amount);
+            const weight = parseFloat(request.weight);
+    
+            if (isNaN(quantity) || isNaN(totalAmount) || isNaN(weight)) {
+                console.error('Invalid data in customer request:', request);
+                return; 
+            }
+    
+            const customerKey = `${request.name}-${request.customer_address}`;
+    
+            if (!customerMap[customerKey]) {
+                customerMap[customerKey] = {
+                    name: request.name,
+                    customer_address: request.customer_address,
+                    weight: weight, 
+                    totalQuantity: quantity, 
+                    request_date: request.request_date, 
+                    total_amount: totalAmount 
+                };
+            } else {
+                customerMap[customerKey].weight += weight; // Sum the weights
+                customerMap[customerKey].totalQuantity += quantity; // Sum the quantities
+                customerMap[customerKey].total_amount += totalAmount; // Accumulate total amount
 
-    document.getElementById('notification-content').innerHTML = namesList;
-}
-
-// Function to close the modal
-function closeModal() {
-    notificationModal.style.display = 'none';
-}
-
-// Close the modal when clicking outside of it
-window.onclick = function(event) {
-    if (event.target === notificationModal) {
-        closeModal(); // Hide the modal when clicking outside
-    }
-};
-
-// Close button inside the modal
-const closeModalButton = notificationModal.querySelector(".close");
-if (closeModalButton) {
-    closeModalButton.addEventListener("click", closeModal); // Close modal when the close button is clicked
-}
-
-// Trigger to open the notification modal
-document.getElementById("bell-icon").addEventListener("click", openModal);
-
-// The automatic opening of the modal has been removed.
-});
-
+                if (new Date(request.request_date) > new Date(customerMap[customerKey].request_date)) {
+                    customerMap[customerKey].request_date = request.request_date;
+                }
+            }
+         });
+    
+            let namesList = '';
+            const uniqueCustomerKeys = Object.keys(customerMap);
+        
+            if (uniqueCustomerKeys.length > 0) {
+                namesList = '<ul>';
+                uniqueCustomerKeys.forEach(key => {
+                    const request = customerMap[key];
+                    namesList += `
+    
+                    <li class="small-font">
+                        <span><h4>${request.name}</h4></span><br>
+                        Address: ${request.customer_address}<br>
+                        Weight: ${request.weight.toFixed(2)} kg <br>
+                        Quantity of Laundry Bags: ${request.totalQuantity} <br>
+                        Date: ${request.request_date}<br>
+                        Total Amount: ${request.total_amount.toFixed(2)}
+                    </li>
+                        <hr>
+                    `;
+                });
+                namesList += '</ul>';
+            } else {
+                namesList = '<p>No new delivery requests.</p>';
+            }
+            document.getElementById('notification-content').innerHTML = namesList;
+        }
+        
+        // Function to close the modal
+        function closeModal() {
+            notificationModal.style.display = 'none';
+        }
+        
+        window.onclick = function(event) {
+            if (event.target === notificationModal) {
+                closeModal(); 
+            }
+        };
+        
+        const closeModalButton = notificationModal.querySelector(".close");
+        if (closeModalButton) {
+            closeModalButton.addEventListener("click", closeModal); // Close modal when the close button is clicked
+        }
+        
+    document.getElementById("bell-icon").addEventListener("click", function(event) {
+        event.preventDefault(); 
+        openModal(); 
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+    });
+    });
