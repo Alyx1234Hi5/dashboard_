@@ -1,12 +1,12 @@
 <?php
 session_start(); 
 
+$user_role = $_SESSION['user_role'];
+
 if(!isset($_SESSION['user_role'])) {
-   header('location: /laundry_system/homepage/homepage.php');
+    header('location: /laundry_system/homepage/homepage.php');
     exit();
 }
-
-$user_role = $_SESSION['user_role'];
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +30,7 @@ $user_role = $_SESSION['user_role'];
     <link rel="stylesheet" href="dashboard.css">
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
     
-   
+    <link rel = "stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <div class="progress"></div>
@@ -42,7 +42,7 @@ $user_role = $_SESSION['user_role'];
                 </button>
 
                 <div class="sidebar-logo">
-                    <a href="/laundry_system/dashboard/dashboard.php">Azia Skye</a>
+                    <a href="#">Azia Skye</a>
                 </div>
             </div>
 
@@ -54,9 +54,8 @@ $user_role = $_SESSION['user_role'];
                     </a>
                 </li>
 
-                
                 <li class="sidebar-item">
-                    <a href="/laundry_system/profile/profile.php" class="sidebar-link">
+                    <a href="/laundry_system/my_profile/profile.php" class="sidebar-link">
                         <i class="lni lni-user"></i>
                         <span>Profile</span>
                     </a>
@@ -69,7 +68,7 @@ $user_role = $_SESSION['user_role'];
                             <span>Users</span>
                         </a>
                     </li>
-                    
+
                     <li class="sidebar-item">
                         <a href="/laundry_system/records/records.php" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse"
                             data-bs-target="#records" aria-expanded="false" aria-controls="records">
@@ -107,70 +106,46 @@ $user_role = $_SESSION['user_role'];
                     </a>
                 </li>
 
-                <?php if ($user_role === 'admin') : ?>
+                    <?php if ($user_role === 'admin') : ?>
                     <li class="sidebar-item">
-                        <a href="/laundry_system/settings/setting.php" class="sidebar-link">
+                        <a href="/laundry_system/settings/settings.php" class="sidebar-link">
                             <i class="lni lni-cog"></i>
                             <span>Settings</span>
                         </a>
                     </li>
 
                     <hr style="border: 1px solid #b8c1ec; margin: 8px">
+
                     <li class="sidebar-item">
-                        <a href="/laundry_system/archived/archive_users.php" class="sidebar-link has-dropdown collapsed" data-bs-toggle="collapse"
-                        data-bs-target="#archived" aria-expanded="false" aria-controls="archived">
-                            <i class='bx bxs-archive-in'></i>
-                            <span>Archived</span>
-                        </a>
-
-                        <ul id="archived" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                            <li class="sidebar-item">
-                                <a href="/laundry_system/archived/archive_users.php" class="sidebar-link">Archived Users</a>
-                            </li>
-
-                            <li class="sidebar-item">
-                                <a href="/laundry_system/archived/archive_customer.php" class="sidebar-link">Archived Customer</a>
-                            </li>
-
-                            <li class="sidebar-item">
-                                <a href="/laundry_system/archived/archive_service.php" class="sidebar-link">Archived Service</a>
-                            </li>
-
-                            <li class="sidebar-item">
-                                <a href="/laundry_system/archived/archive_category.php" class="sidebar-link">Archived Category</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <!-- <li class="sidebar-item">
                         <a href="/laundry_system/archived/archive_users.php" class="sidebar-link">
                             <i class='bx bxs-archive-in'></i>
                             <span class="nav-item">Archived</span>
                         </a>
-                    </li> -->
+                    </li>
                 <?php endif; ?>
+
             </ul>
 
             <div class="sidebar-footer">
-                <a href="javascript:void(0)" class="sidebar-link" id="btn_logout">
+                <a href="#" id="btn_logout" class="sidebar-link">
                     <i class="lni lni-exit"></i>
                     <span>Logout</span>
                 </a>
             </div>
         </aside>
         
-       <!-----------------------------------------MAIN CONTENT---------------------------------------->
-       <div class="main-content">
+        <!-------------MAIN CONTENT------------->
+        <div class="main-content">
             <nav>
                 <div class="d-flex justify-content-between align-items-center">
                     <h1>Dashboard</h1>
                 </div>
             </nav>
 
-        <!----------------CARDS FOR SERVICE TYPE ORDERS (RUSH/PICK UP/DELIVERY) --------------------->
-                 <div class="cards">
+                 <!----CARDS FOR SERVICE TYPE ORDERS (RUSH/PICK UP/DELIVERY) ---->
+                <div class="cards">
                     <div class="card card-body p-3">
-                    <h4 class="pickup-title">Customer Pick-Up</h4>
+                        <h4>Customer Pick-Up</h4>
                         <h5 id="pickup-orders">
                         <?php 
                             $conn = new mysqli('localhost', 'root', '', 'laundry_db');
@@ -202,90 +177,106 @@ $user_role = $_SESSION['user_role'];
                             
                             $conn->close();
                         ?>
-                        </h5>
+                        </p>
                     </div>
-        <!-----------------------  DELIVERY REQUEST BAGONG CODE------------------------------------>
+
+
+<!---------------------------- delivery up ------------------------------------------------------------------->
 
                     <div class="card card-body p-3">
                         <div class="header-container">
-                                <h4 class="delivery-title">Delivery Requests</h4>
+                            <h4 class="delivery-title">Delivery Requests</h4>
                             <div class="notification-bell">
-                                <a href="#" id="bell-icon" onclick="openModal()">
-                                <i class="bell-icon">🔔</i>
+                                <a href="#" id="bell-icon">
+                                    <i class="fas fa-bell" style="font-size: 19px;"></i> <!-- Font Awesome Bell Icon -->
                                 </a>
                             </div>
                         </div>
 
-                    <h5 id="delivery-orders">
+                        <h5 id="delivery-orders">
                         <?php 
-                            $conn = new mysqli('localhost', 'root', '', 'laundry_db');
+                        $conn = new mysqli('localhost', 'root', '', 'laundry_db');
 
-                            if ($conn->connect_error) {
+                        if ($conn->connect_error) {
                                 echo json_encode(['status' => 'error', 'message' => 'Database connection failed']);
-                                exit;
-                            }
+                        exit;
+                        }
 
-                            // Query to get details of delivery requests for today
-                            $qry = "
-                                SELECT sr.customer_name, t.customer_address, sr.price, sr.weight, sr.quantity, sr.request_date, t.total_amount
-                                FROM service_request sr
-                                JOIN transaction t 
-                                ON sr.customer_id = t.customer_id
-                                WHERE DATE(sr.request_date) = CURDATE()
-                                AND t.service_option_name = 'Delivery'
-                            ";
+                        $sql = "
+                        SELECT 
+                            sr.customer_name,
+                            t.customer_address,
+                            SUM(sr.weight) AS total_weight,
+                            SUM(sr.quantity) AS total_quantity,
+                            t.total_amount,
+                            MAX(sr.request_date) AS request_date  
+                        FROM 
+                            service_request sr
+                        JOIN 
+                            transaction t ON sr.request_id = t.request_id
+                        WHERE 
+                            DATE(sr.request_date) = CURDATE()
+                            AND t.service_option_name = 'Delivery'
+                        GROUP BY 
+                            sr.customer_name, t.customer_address
+                    ";
 
-                            $qry_run = $conn->query($qry);
+                            $qry_run = $conn->query($sql); 
 
-                            if (!$qry_run) {
-                                echo json_encode(['status' => 'error', 'message' => 'Query failed: ' . $conn->error]);
-                                exit;
-                            }
+                        if (!$qry_run) {
+                            echo json_encode(['status' => 'error', 'message' => 'Query failed: ' . $conn->error]);
+                            exit;
+                        }
 
-                            $customer_requests = [];
-                            while ($row = $qry_run->fetch_assoc()) {
-                                $customer_requests[] = [
-                                    'name' => $row['customer_name'],
-                                    'customer_address' => $row['customer_address'],
-                                    'price' => $row['price'],
-                                    'weight' => $row['weight'],
-                                    'quantity' => $row['quantity'],
-                                    'request_date' => $row['request_date'],
-                                    'total_amount' => $row['total_amount']
-                                ];
-                            }
+                        $customer_requests = [];
+                        while ($row = $qry_run->fetch_assoc()) {
+                            $customer_requests[] = [
+                                'name' => $row['customer_name'],
+                                'customer_address' => $row['customer_address'],
+                                'weight' => $row['total_weight'],
+                                'quantity' => $row['total_quantity'],
+                                'request_date' => $row['request_date'], 
+                                'total_amount' => $row['total_amount']
+                            ];
+                        }
 
-                            $conn->close();
+                       // unique key 
+                        $uniqueCustomerKeys = [];
+                        foreach ($customer_requests as $request) {
+                            $uniqueKey = strtolower(trim($request['name'])) . '-' . strtolower(trim($request['customer_address']));
+                            $uniqueCustomerKeys[$uniqueKey] = true; // Use the unique key as an array key
+                        }
 
-                            // Display total requests count
-                            echo '<h2>' . count($customer_requests) . '</h2>';
+                        // Count unique customers based on the unique keys
+                        $requestCount = count($uniqueCustomerKeys);
+
+                        $conn->close();
+                        echo '<h2>' . $requestCount . '</h2>'; // Added context to the count
+                        echo '<script>
+                                const customerRequests = ' . json_encode($customer_requests) . ';
+                                const requestCount = ' . $requestCount . ';
+                            </script>';
                         ?>
-                        </h5>
+                    </h5>
+                </div>
+
+             <!-------------- Modal for Notifications--------------------------->
+            <div id="notificationModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modalhead">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <h2>🔔 Notifications</h2>
+                        <br>
+                       <p>You have <span id="notification-count"></span> Delivery Requests for Today!</p>
                     </div>
-
-                    <script>
-                        const customerRequests = <?php echo json_encode($customer_requests); ?>;
-                        const requestCount = <?php echo count($customer_requests); ?>;
-                    </script>
-
-                    <script src="dashboard.js"></script>
-
-                    <!-- Modal Structure -->
-                   <div id="notificationModal" class="modal" style="display: none;">
-                        <div class="modal-content">
-                            <div class="modalhead">
-                            <span class="close" onclick="closeModal()">&times;</span>
-                            <h2>🔔 Notifications</h2>
-                            <p>You have <span id="notification-count"></span> Delivery Requests for Today!</p>
-                            </div>
-                            <div id="notification-content"></div>
-                        </div>
-                    </div>
-
-            <!----------------------------- Rush Request ------------------------------------------>
+                    <div id="notification-content"></div>
+                </div>
+            </div>
+          
+<!------------------------------------ Rush --------------------------------------------------->
 
                     <div class="card card-body p-3">
-                        <h4 class="rush-title">Rush Requests</h4>
+                        <h4>Rush Requests</h4>
                         <h5 id="rush-orders">
                         <?php 
                             $conn = new mysqli('localhost', 'root', '', 'laundry_db');
@@ -325,10 +316,10 @@ $user_role = $_SESSION['user_role'];
                     </div>
                 </div>
 
-                <!--------------------------------   CHARTS   ----------------------------------------->
+                <!------------------CHARTS----------------------->
                 <div class="charts-container">
                     <div class="charts">
-                        <!-----------------------  ORDERS IN DAY  ----------------------------------->
+                        <!----------------------------ORDERS IN DAY----------------------------------->
                         <div class="chart" id="weeklyChart">
                             <h4>Service Requests in Day</h4>
                             <canvas id="daychart"></canvas>
@@ -340,7 +331,6 @@ $user_role = $_SESSION['user_role'];
                             <h4>Service Requests in Week</h4>
                             <canvas id="weekchart"></canvas> 
                         </div>
-                        
                         <!----------------------------------------ORDERS IN MONTH---------------------------------->
                         <div class="chart" id="monthlyChart">
                             <h4>Service Requests in Month</h4>
@@ -356,30 +346,45 @@ $user_role = $_SESSION['user_role'];
                     </div> <!--end of charts-->   
                 </div> <!--end of charts-container-->
                 
-                <!----------------------------------CALENDAR--------------------------------------->
-               
+                <!--------------CALENDAR------------------->
                 <div class="container">
                     <div class="left">
                         <div class="calendar">
-                        <div class="month">
-                            <i class="fas fa-angle-left prev"></i>
-                            <div class="date">December 2015</div>
-                            <i class="fas fa-angle-right next"></i>
-                        </div>
-                        <div class="weekdays">
-                            <div>Sun</div>
-                            <div>Mon</div>
-                            <div>Tue</div>
-                            <div>Wed</div>
-                            <div>Thu</div>
-                            <div>Fri</div>
-                            <div>Sat</div>
-                        </div>
-                        <div class="days"></div>
+                            <div class="month">
+                                <i class="fas fa-angle-left prev"></i>
+                                <div class="date">December 2015</div>
+                                <i class="fas fa-angle-right next"></i>
+                            </div>
+                            <div class="weekdays">
+                                <div>Sun</div>
+                                <div>Mon</div>
+                                <div>Tue</div>
+                                <div>Wed</div>
+                                <div>Thu</div>
+                                <div>Fri</div>
+                                <div>Sat</div>
+                            </div>
+                            <div class="days"></div>
+
+                            <div class="container-sm">
+                                <div class="legend-container">
+                                    <div class="legend-item">
+                                        <i class='bx bxs-circle' style='color:#0758ff'></i>
+                                        <span>Past events</span>
+                                    </div>
+
+                                    <div class="legend-item">
+                                        <i class='bx bxs-circle' style='color:#ff0707'></i>
+                                        <span>Upcoming events</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                     <div class="right">
-                        <div class="event-title"><i class="fas fa-calendar-alt"></i> Events</div>
+                        <div class="event-title">Events</div>
+                        <hr>
                         <div class="events"></div>
                     </div>
 
@@ -390,7 +395,10 @@ $user_role = $_SESSION['user_role'];
                             die("Connection failed: " . $conn->connect_error);
                         }
 
-                        $query = "SELECT request_id, laundry_service_option, request_date, service_request_date, customer_name FROM service_request WHERE order_status = 'completed'";
+                        $query = "SELECT sr.request_id, sr.laundry_service_option, sr.request_date, sr.service_request_date, sr.customer_name , t.service_option_name, t.laundry_cycle
+                                FROM service_request sr 
+                                INNER JOIN transaction t ON sr.request_id = t.request_id 
+                                WHERE sr.order_status = 'completed'";
                         $result = $conn->query($query);
 
                         if (!$result) {
@@ -403,6 +411,8 @@ $user_role = $_SESSION['user_role'];
                         $events[] = array(
                             'title' => $row['laundry_service_option'],
                             'customer_name' => $row['customer_name'],
+                            'service_option_name' => $row['service_option_name'],
+                            'laundry_cycle' => $row['laundry_cycle'],
                             'start' => $row['service_request_date'],
                             'end' => $row['request_date'],
                         );
@@ -527,17 +537,19 @@ $user_role = $_SESSION['user_role'];
                                 const eventDate = new Date(event.end);
                                 if (eventDate.getDate() === date.getDate() && eventDate.getMonth() === date.getMonth() && eventDate.getFullYear() === date.getFullYear()) {
                                     eventList += `
-                                        <hr style="border: 2px solid #b8c1ec;"> 
-                                        <div class="event">
+                                        <hr style="border: 1px solid #b8c1ec; margin: 1.5rem 0;">
+                                        <div class="event_container">
                                             <h4><li>${event.title}</li></h4>
-                                            <span>Customer name: ${event.customer_name}</span>
-                                            <span>Start: ${event.start}</span>
-                                            <span>End: ${event.end}</span>
+                                            <div class="event-details">
+                                                <span>Customer Name: ${event.customer_name}</span>
+                                                <span>Service Type: ${event.service_option_name}</span>
+                                                <span>Laundry Cycle: ${event.laundry_cycle}</span>
+                                                <span>Start: ${event.start}</span>
+                                                <span>End: ${event.end}</span>
+                                            </div>
                                         </div>
-                                       
-                                        
                                     `;
-                                } // <hr style="border: 1px solid #b8c1ec; margin: 1rem;"> 
+                                }  
                             });
 
                             eventsContainer.innerHTML = eventList;
@@ -554,9 +566,8 @@ $user_role = $_SESSION['user_role'];
                         displayEventsForDate(new Date().getDate(), <?php echo json_encode($events); ?>);
                     </script>
                 </div> <!--END OF CALENDAR CONTAINER-->
-
-                <!-- logout -->
-                <div id="logoutModal" class="modal" style="display: none;">
+            
+                <div id="logoutModal" class="modal" style="display:none;">
                     <div class="modal-cont">
                         <span class="close">&times;</span>
                         <h2>Do you want to logout?</h2>
